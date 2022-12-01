@@ -1,6 +1,32 @@
 use std::fs::File;
 use std::io::{self, prelude::*, BufReader};
 
+fn v_array() -> io::Result<()> {
+    let file = File::open("input.txt")?;
+    let reader = BufReader::new(file);
+
+    let mut vec = Vec::new();
+    let mut cvalue = 0;
+    for line in reader.lines() {
+        if let Ok(l) = line {
+            if l.is_empty() {
+                vec.push(cvalue);
+                cvalue = 0;
+            } else {
+                let vint = l.parse::<i32>().unwrap();
+                cvalue += vint;
+            }
+        }
+    }
+
+    vec.sort();
+    vec.reverse();
+    println!("max v2: {}", vec[0]);
+    println!("max3 v2: {}", vec[0] + vec[1] + vec[2]);
+    Ok(())
+}
+
+
 fn main() -> io::Result<()> {
     let file = File::open("input.txt")?;
     let reader = BufReader::new(file);
@@ -13,7 +39,7 @@ fn main() -> io::Result<()> {
     for line in reader.lines() {
         if let Ok(l) = line {
             if l.is_empty() {
-                println!("cvalue {cvalue}");
+                //println!("cvalue {cvalue}");
                 if cvalue > max {
                     max = cvalue;
                 }
@@ -39,5 +65,6 @@ fn main() -> io::Result<()> {
     let maxsum = max0 + max1 + max2;
     println!("max3 {maxsum}");
 
+    v_array().expect("input file not found");
     Ok(())
 }
